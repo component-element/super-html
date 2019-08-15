@@ -1,9 +1,9 @@
-import Component from '../src/component/index.js';
-import html from '../src/htmlSimple.js';
+import { Component, html } from '../src/core/index';
 
 class A extends Component {
-    constructor(ele) {
-        super(ele);
+    data: any;
+    constructor() {
+        super();
         this.data = {
             a: 1
         };

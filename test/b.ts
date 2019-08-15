@@ -1,6 +1,6 @@
-import Component from '../src/component/index.js';
-import html from '../src/htmlSimple.js';
+import { Component, html } from '../src/core/index';
 class B extends Component {
+    data: any;
     constructor() {
         super();
         this.data = 9;

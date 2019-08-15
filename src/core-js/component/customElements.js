@@ -32,6 +32,12 @@ class CustomElementRegistry {
         this.customElementsMap = new Map();
         customElements = this;
     }
+    getAllTagName() {
+        return [...this.customElementsMap.keys()];
+    }
+    get(name) {
+        return this.customElementsMap.get(name);
+    }
     define(tagName, component) {
         if (!tagNameReg.test(tagName + '')) {
             throw new Error(`${tagName} is not a valid custom element name.`);

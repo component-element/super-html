@@ -59,6 +59,7 @@ const observer = new MutationObserver(function(events) {
         }
     });
     if (nodes.length > 0) {
+        console.log('do add', nodes.filter((i) => i.nodeType === 1));
         addNodes(nodes);
     }
 });
@@ -69,6 +70,8 @@ const defaultOption = {
     subtree: !0
 };
 
-observer.observe(document.body, defaultOption);
-
-export default render;
+export default function(temp, target) {
+    console.log('observer', target);
+    observer.observe(target, defaultOption);
+    return render(temp, target);
+}

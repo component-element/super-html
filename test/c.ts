@@ -1,19 +1,9 @@
-import Component from '../src/component/index.js';
-import html from '../src/htmlSimple.js';
-
-import customElements from '../src/component/customElements.js';
-
-import render from '../src/simpleRender.js';
-
-import A from './a.js';
-import B from './b.js';
-
-customElements.define('my-a', A);
-customElements.define('my-b', B);
+import { Component, html } from '../src/core/index';
 
 class C extends Component {
-    constructor(ele) {
-        super(ele);
+    _value: string;
+    constructor() {
+        super();
         this._value = '';
     }
 
@@ -48,17 +38,4 @@ class C extends Component {
     }
 }
 
-customElements.define('my-c', C);
-
-const root = document.getElementById('root');
-
-render(
-    html`
-        <my-c>
-            ${html`
-                <my-b>hhhh</my-b>
-            `}
-        </my-c>
-    `,
-    root
-);
+export default C;

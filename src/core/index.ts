@@ -1,7 +1,13 @@
 import render from './render';
+import html from './html';
+import Component from './component';
+import customElements from './customElements';
 
-export { render };
+export { render, html, Component, customElements };
 
 export default {
-    render
+    render,
+    html,
+    Component,
+    customElements
 };
