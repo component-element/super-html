@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "http-server ./test -c 0",
+    "test:build": "webpack -f ./webpack.config.js --watch",
+    "dev": "http-server ./www -c 0",
     "build": "tsc",
     "prettier": "pretty-quick --staged",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -35,7 +36,10 @@
     "prettier": "^1.18.2",
     "prettier-tslint": "^0.4.2",
     "pretty-quick": "^1.11.1",
+    "ts-loader": "^6.0.4",
     "tslint": "^5.18.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.6"
   }
 }
