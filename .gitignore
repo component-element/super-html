@@ -4,6 +4,7 @@ node_modules
 
 # compiled output
 dist
+www
 
 # IDEs
 .idea
