@@ -1,6 +1,14 @@
-import { Component, html } from '../src/core/index';
+import { Component, html, Props } from '../src/core/index';
 
 class A extends Component {
+    @Props({
+        attributeName: 'mes'
+    })
+    mmmm = 'hihihi';
+    @Props({
+        type: 'json'
+    })
+    d;
     data: any;
     constructor() {
         super();
@@ -22,7 +30,7 @@ class A extends Component {
                     this.a = this.a + 1;
                 }}"
             >
-                this a Class ${this.data.a}
+                this a ${this.mmmm} Class ${this.data.a}
             </div>
         `;
     }

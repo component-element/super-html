@@ -1,6 +1,21 @@
-import { Component, html } from '../src/core/index';
+import { Component, html, Props } from '../src/core/index';
 
-class C extends Component {
+class CBase extends Component {
+    @Props({
+        type: 'number'
+    })
+    name = 'some value';
+}
+
+class C extends CBase {
+    @Props({
+        type: 'string'
+    })
+    name = 'some value';
+    @Props({
+        type: 'string'
+    })
+    name1 = 'some value';
     _value: string;
     constructor() {
         super();
@@ -22,18 +37,22 @@ class C extends Component {
 
     render() {
         return html`
-            <div>this is c</div>
+            <div>this is ${this.name}</div>
+            input:
             <input
+                class="${'a'}"
                 .value=${this.value}
                 @input="${(e) => {
                     this.handleEvent(e);
                 }}"
             />
-            ${this.value == 'a'
-                ? html`
-                      <my-a></my-a>
-                  `
-                : null}
+            <my-a
+                mes=${this.value}
+                .d="${{ m: 'd' }}"
+                @click="${() => {
+                    console.log('click my -a');
+                }}"
+            ></my-a>
         `;
     }
 }
