@@ -1,10 +1,30 @@
 import { render } from 'lit-html';
 import Component from './component';
 import customElements from './customElements';
+import { propsToken, propsOptionTypes } from './decorators/index';
 
 interface AttributeChangeMeta {
     target: Node;
     attributeName: string;
+}
+
+function formatValue(value: any, t: propsOptionTypes) {
+    if (t === 'string') {
+        return `${value}`;
+    }
+    if (t === 'number') {
+        return Number(value) + 0;
+    }
+    if (t === 'json') {
+        try {
+            return JSON.stringify(value);
+        } catch (error) {
+            return {};
+        }
+    }
+    if (t === 'boolean') {
+        return value !== null;
+    }
 }
 
 function isRegisterElement(ele: ChildNode | Element) {
@@ -17,8 +37,9 @@ function isRegisterElement(ele: ChildNode | Element) {
     return tagNames.includes(tagName);
 }
 
-class Manager {
+class App {
     elementComponentMap: WeakMap<Element, Component> = new WeakMap();
+    elementAttributeMap: WeakMap<Element, Set<string>> = new WeakMap();
     observer: MutationObserver;
     constructor(root?: Element) {
         this.observer = new MutationObserver((e) => {
@@ -69,14 +90,31 @@ class Manager {
         });
     }
     handleAttributeChanged(attributeChangeMetas: Array<AttributeChangeMeta>) {
-        const { elementComponentMap } = this;
+        const { elementComponentMap, elementAttributeMap } = this;
         attributeChangeMetas
             .filter(({ target }) => !!elementComponentMap.get(target as Element))
             .forEach(({ target, attributeName }) => {
                 const instance = elementComponentMap.get(target as Element) as Component;
-                // console.log('handleAttributeChanged', instance, attributeName);
-                window['i'] = instance;
-                window['n'] = attributeName;
+                const attributeNameSet = elementAttributeMap.get(target as Element);
+                if (attributeNameSet && attributeNameSet.has(attributeName)) {
+                    // console.log('do props update', target, instance, attributeName);
+                    const propsMetaMap = Reflect.getMetadata(propsToken, instance);
+                    const value = (target as Element).getAttribute(attributeName);
+                    Object.keys(propsMetaMap)
+                        .filter((propKey) => {
+                            return propsMetaMap[propKey].attributeName == attributeName;
+                        })
+                        .map((propKey) => {
+                            return {
+                                propKey,
+                                type: propsMetaMap[propKey].type
+                            };
+                        })
+                        .forEach(({ propKey, type }) => {
+                            instance[propKey] = formatValue(value, type);
+                        });
+                    instance.requestUpdate();
+                }
             });
 
         // const elements: Array<HTMLElement> = nodes.filter((node) => node.nodeType === 1).map((ele) => ele as HTMLElement);
@@ -84,7 +122,8 @@ class Manager {
     }
     mapTree(node: ChildNode | Element) {
         const flag = isRegisterElement(node);
-        if (flag) {
+        const hasInstance = this.elementComponentMap.get(node as Element);
+        if (flag && !hasInstance) {
             return this.renderCompoentFormElement(node as HTMLElement);
         }
         const childNodes = node.childNodes;
@@ -93,12 +132,30 @@ class Manager {
         });
     }
     renderCompoentFormElement(ele: HTMLElement) {
-        const { elementComponentMap, observer } = this;
+        const { elementComponentMap, elementAttributeMap, observer } = this;
         const tagName = ele.tagName.toLocaleLowerCase();
         const Component = customElements.get(tagName);
         const instance = new Component();
 
         // do lifecicle
+
+        const propsMetaMap = Reflect.getMetadata(propsToken, instance);
+
+        if (propsMetaMap) {
+            const propKeys = Object.keys(propsMetaMap);
+            const attributeNameSet: Set<string> = new Set();
+            for (let i = 0; i < propKeys.length; i++) {
+                const propKey = propKeys[i];
+                const { attributeName, type, shouldUpdate } = propsMetaMap[propKey];
+                instance[propKey] = formatValue(ele.getAttribute(attributeName), type);
+                if (shouldUpdate) {
+                    attributeNameSet.add(attributeName as string);
+                }
+            }
+            if (attributeNameSet.size > 0) {
+                elementAttributeMap.set(ele, attributeNameSet);
+            }
+        }
 
         elementComponentMap.set(ele, instance);
         observer.observe(ele, {
@@ -120,4 +177,4 @@ class Manager {
     }
 }
 
-export default Manager;
+export default App;
