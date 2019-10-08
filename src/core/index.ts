@@ -1,15 +1,12 @@
-import render from './render';
-import html from './html';
-import Component from './component';
-import customElements from './customElements';
-import App from './app';
+import render, { parts } from './render/index';
+import html from './templateTag/index';
+import Component from './component/index';
 
 export * from './decorators/index';
 
-export { render, html, Component, customElements, App };
+export { render, html, Component, parts };
 
 export default {
-    App,
     render,
     html,
     Component,
