@@ -1,4 +1,4 @@
-import { TemplateTag, genarateComponetTemplateTag } from '../templateTag/index';
+import { TemplateTag, genarateComponetTemplateTag, ComponentTemplateTag } from '../templateTag/index';
 
 const stateLessToken = Symbol('stateLessToken');
 
@@ -20,7 +20,7 @@ class BaseComponent {
 }
 
 export interface stateLessFunction {
-    (): TemplateTag;
+    (props?: any): TemplateTag;
 }
 
 export interface RenderComponent extends Component {
@@ -41,6 +41,7 @@ export interface ComponentClass {
 }
 
 export interface StateLessComponentClass {
+    for(props?): ComponentTemplateTag;
     new (props?: any): stateLessRenderComponent;
 }
 
@@ -52,7 +53,7 @@ class Component extends BaseComponent {
         return class extends Component {
             [stateLessToken] = true;
             render() {
-                return fn();
+                return fn(this.props);
             }
         };
     }

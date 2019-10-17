@@ -9,7 +9,7 @@ function initParentChildren(parentComponent: any) {
 }
 
 function genarateValueToTemplateResult(t, parent) {
-    if (typeof t === 'object' && (t.type === SimpleTemplateToken || t.type === ComponentTemplateToken)) {
+    if (typeof t === 'object' && t !== null && (t.type === SimpleTemplateToken || t.type === ComponentTemplateToken)) {
         return genarateTemplateTagToTemplateResult(t, parent);
     }
     if (Array.isArray(t)) {
