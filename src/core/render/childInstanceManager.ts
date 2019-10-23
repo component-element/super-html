@@ -1,3 +1,5 @@
+import { RenderComponent } from '../component';
+
 export const managers: WeakMap<any, ChildInstanceManager> = new WeakMap();
 
 export default class ChildInstanceManager {
@@ -8,7 +10,7 @@ export default class ChildInstanceManager {
         }
         return new ChildInstanceManager(root);
     }
-    children: Array<any>;
+    children: Array<RenderComponent>;
     index: number;
     constructor(root) {
         this.children = [];
@@ -32,14 +34,23 @@ export default class ChildInstanceManager {
     }
 
     clearMiddleNotUseChildInstance(index: number) {
-        this.children = [...this.children.slice(0, this.index + 1), ...this.children.slice(index)];
+        const newChildren = [...this.children.slice(0, this.index + 1), ...this.children.slice(index)];
+        const clearChildren = this.children.slice(this.index + 1, index - this.index - 1);
+        this.children = newChildren;
         this.index = this.index + 1;
-        return this;
+        return clearChildren;
     }
 
     clearLastNotUseChildInstance() {
-        this.children = [...this.children.slice(0, this.index + 1)];
+        if (this.children.length == 0) {
+            this.index = -1;
+            return [];
+        }
+        const newChildren = [...this.children.slice(0, this.index + 1)];
+        const clearChildren = [...this.children.slice(this.index + 1)];
+        this.children = newChildren;
         this.index = -1;
+        return clearChildren;
     }
 
     findCanReUseIntance(ComponentClass) {
