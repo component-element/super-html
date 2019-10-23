@@ -17,6 +17,9 @@ class BaseComponent {
             updateInstance(this);
         }
     }
+    connectedCallback() {}
+    disconnectedCallback() {}
+    propsChangedCallback(newProps?: any) {}
 }
 
 export interface stateLessFunction {
@@ -27,7 +30,7 @@ export interface RenderComponent extends Component {
     render(): TemplateTag;
 }
 
-export interface stateLessRenderComponent extends Component {
+export interface StateLessRenderComponent extends Component {
     [stateLessToken]: boolean;
     render(): TemplateTag;
 }
@@ -37,12 +40,13 @@ export interface RenderComponentClass {
 }
 
 export interface ComponentClass {
+    for(props?): ComponentTemplateTag;
     new (props?: any): Component;
 }
 
 export interface StateLessComponentClass {
     for(props?): ComponentTemplateTag;
-    new (props?: any): stateLessRenderComponent;
+    new (props?: any): StateLessRenderComponent;
 }
 
 class Component extends BaseComponent {
