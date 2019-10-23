@@ -5,13 +5,17 @@ import { TemplateTag } from '../templateTag/index';
 
 import updateInstance from './updateInstance';
 
-import genarateTemplateTagToTemplateResult from './genarateTemplateTagToTemplateResult';
+import { ProcessorTemplateTagToTemplateResult } from './genarateTemplateTagToTemplateResult';
+import processorLifeCircle from './processorLifeCircle';
 
 Component.registerUpdateCallback(updateInstance);
 
 export { parts, templateResultNodePartMap };
 
 export default function(t: TemplateTag, container: Element | DocumentFragment, options?: Partial<RenderOptions>) {
-    const templateR = genarateTemplateTagToTemplateResult(t, container);
-    return render(templateR, container, options);
+    const processor = new ProcessorTemplateTagToTemplateResult();
+    const templateR = processor.wrapGenarateTemplateTagToTemplateResult(t, container);
+    const renderResult = render(templateR, container, options);
+    processorLifeCircle(processor.instanceConnectAndDisConnectTask);
+    return renderResult;
 }
