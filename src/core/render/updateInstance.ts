@@ -12,10 +12,10 @@ export function findNodePart(instance) {
     return nodePart;
 }
 
-export default function updateInstance(instance) {
+function updateInstance(instance) {
     const nodePart = findNodePart(instance);
     const oldTemplateResult = findTemplateResult(instance);
-    if (nodePart['__pendingValue'] !== oldTemplateResult) {
+    if (!nodePart || nodePart['__pendingValue'] !== oldTemplateResult) {
         return console.warn('disconnect instance cant update');
     }
 
@@ -29,3 +29,18 @@ export default function updateInstance(instance) {
     }
     return updateResult;
 }
+
+function cantRecursive(fn: (...args: Array<any>) => any) {
+    let doing = false;
+    return function(...args) {
+        if (doing) {
+            return;
+        }
+        doing = true;
+        const result = fn.apply(this, args);
+        doing = false;
+        return result;
+    };
+}
+
+export default cantRecursive(updateInstance);
