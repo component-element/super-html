@@ -1,0 +1,11 @@
+dist
+src
+test
+wwww
+.gitignore
+.prettierignore
+.prettierrc
+rollup.config.js
+tslint.json
+tsconfig.json
+webpack.config.js
