@@ -1,7 +1,7 @@
 {
-  "name": "component",
-  "version": "1.0.0",
-  "description": "",
+  "name": "super-html",
+  "version": "0.0.1",
+  "description": "super html, fast render your html",
   "main": "index.js",
   "scripts": {
     "test:build": "webpack -f ./webpack.config.js --watch",
