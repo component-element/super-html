@@ -23,3 +23,7 @@ polymer-polymer-*.tgz
 # Typings are generated upon publish to NPM, except for one.
 *.d.ts
 !interfaces.d.ts
+
+#compiled file
+index.js
+index.mjs
