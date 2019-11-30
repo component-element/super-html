@@ -9,7 +9,7 @@ class BaseComponent {
         updateInstance = fn;
     }
     props: any;
-    constructor(props = {}) {
+    constructor(props) {
         this.props = props;
     }
     requestUpdate() {
