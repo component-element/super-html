@@ -1,6 +1,9 @@
 # super-html
 Efficient, Expressive, Extensible HTML templates in JavaScript
 
+![superHTML](https://woolson.gitee.io/npmer-badge/superHTML-444-eee1c0-1.0.0-ffffff-49e0b3-square-gradient-plain.svg)
+[![npm](https://woolson.gitee.io/npmer-badge/npm-444-fb3e44-v0.0.2-ffffff-089df2-square-gradient-plain.svg)](https://www.npmjs.com/package/super-html)
+
 ## Documentation
 
 Full documentation is doing.
