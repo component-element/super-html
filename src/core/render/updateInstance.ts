@@ -1,6 +1,7 @@
-import { templateResultNodePartMap } from '../../../../lit-html/src/lit-html';
+import { templateResultNodePartMap } from '../../../../lit-html/src/lib/parts';
 import { instanceTemplateResultMap, ProcessorTemplateTagToTemplateResult } from './genarateTemplateTagToTemplateResult';
 import processorLifeCircle from './processorLifeCircle';
+import { zones } from './zone';
 
 export function findTemplateResult(instance) {
     return instanceTemplateResultMap.get(instance);
@@ -19,7 +20,7 @@ function updateInstance(instance) {
         return console.warn('disconnect instance cant update');
     }
 
-    const processor = new ProcessorTemplateTagToTemplateResult();
+    const processor = new ProcessorTemplateTagToTemplateResult(zones.get(instance));
 
     const newTemplateResult = processor.instanceRender(instance);
     nodePart.setValue(newTemplateResult);

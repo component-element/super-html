@@ -13,16 +13,16 @@ class BaseComponent {
         this.props = props;
     }
     requestUpdate() {
-        if (typeof updateInstance === 'function') {
-            updateInstance(this);
-        }
+        // if (typeof updateInstance === 'function') {
+        //     updateInstance(this);
+        // }
     }
     connectedCallback() {}
     disconnectedCallback() {}
     propsChangedCallback(newProps?: any) {}
 }
 
-export interface stateLessFunction {
+export interface StateLessFunction {
     (props?: any): TemplateTag;
 }
 
@@ -53,7 +53,7 @@ class Component extends BaseComponent {
     static for(props?) {
         return genarateComponetTemplateTag(this, props);
     }
-    static genarateFn(fn: stateLessFunction): StateLessComponentClass {
+    static genarateFn(fn: StateLessFunction): StateLessComponentClass {
         return class extends Component {
             [stateLessToken] = true;
             render() {

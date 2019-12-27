@@ -16,12 +16,15 @@ import lifeCircle from './lifeCircle';
 const root = document.getElementById('root');
 const app = document.getElementById('app');
 
-const tag = html`
-    ${Simple.for()} ${timer.for()} ${updateChildProps.for()} ${Props.for({ message: 'props 传递成功' })} ${update.for()} ${ext.for()}
-    ${parentchild.for()} ${highLevel.for({ mes: 'highLevel' })} ${differentTag.for()} ${timeoutUpdate.for()} ${input.for()}
-    ${lifeCircle.for()}
-`;
+const tag = Simple.for();
+
+// const tag = html`
+//     ${Simple.for()} ${timer.for()} ${updateChildProps.for()} ${Props.for({ message: 'props 传递成功' })} ${update.for()} ${ext.for()}
+//     ${parentchild.for()} ${highLevel.for({ mes: 'highLevel' })} ${differentTag.for()} ${timeoutUpdate.for()} ${input.for()}
+//     ${lifeCircle.for()}
+// `;
 
 render(tag, root);
+// render(Simple.for('has props'), root);
 
-// render(tag, app);
+window['fn'] = (str) => render(Simple.for(str), root);
