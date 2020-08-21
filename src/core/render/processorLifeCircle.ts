@@ -19,4 +19,5 @@ export default function(tasks: Task[]) {
             return;
         }
     });
+    tasks.length = 0;
 }

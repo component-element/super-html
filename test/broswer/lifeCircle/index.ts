@@ -1,12 +1,12 @@
-import { Component, html } from '../../../src/core/index';
+import { Component, html, Input } from '../../../src/core/index';
 
 class Interval extends Component {
     data = 1;
     timer = null;
-    d: any;
-    constructor(props) {
-        super(props);
-        this.d = props;
+    @Input() d: any;
+    constructor() {
+        super();
+        console.log('constructor');
     }
     render() {
         return html`

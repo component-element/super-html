@@ -1,7 +1,8 @@
-import { Component, html } from '../../../src/core/index';
+import { Component, html, Input } from '../../../src/core/index';
 import Timer from '../demo/timer';
 
 class Child extends Component {
+    @Input() props: any;
     render() {
         return html`
             <div>${this.props}</div>

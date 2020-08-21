@@ -6,7 +6,6 @@ const fn = function(comp: ComponentClass) {
         render() {
             return html`
                 ${comp.for({
-                    ...this.props,
                     key: 'add a key'
                 })}
             `;
@@ -17,7 +16,7 @@ const fn = function(comp: ComponentClass) {
 class Mes extends Component {
     render() {
         return html`
-            <div>${JSON.stringify(this.props)}</div>
+            <div>${JSON.stringify({})}</div>
         `;
     }
 }

@@ -1,30 +1,21 @@
 import { TemplateTag, genarateComponetTemplateTag, ComponentTemplateTag } from '../templateTag/index';
+import updateInstance from '../render/updateInstance';
 
 const stateLessToken = Symbol('stateLessToken');
 
-let updateInstance;
-
 class BaseComponent {
-    static registerUpdateCallback(fn) {
-        updateInstance = fn;
-    }
-    props: any;
-    constructor(props) {
-        this.props = props;
-    }
+    __injector: any;
     requestUpdate() {
-        if (typeof updateInstance === 'function') {
-            updateInstance(this);
-        }
+        updateInstance(this.__injector, this);
     }
     connectedCallback() {}
     disconnectedCallback() {}
     propsChangedCallback(newProps?: any) {}
 }
 
-export interface stateLessFunction {
-    (props?: any): TemplateTag;
-}
+// export interface stateLessFunction {
+//     (props?: any): TemplateTag;
+// }
 
 export interface RenderComponent extends Component {
     render(): TemplateTag;
@@ -46,21 +37,21 @@ export interface ComponentClass {
 
 export interface StateLessComponentClass {
     for(props?): ComponentTemplateTag;
-    new (props?: any): StateLessRenderComponent;
+    new (): StateLessRenderComponent;
 }
 
 class Component extends BaseComponent {
     static for(props?) {
         return genarateComponetTemplateTag(this, props);
     }
-    static genarateFn(fn: stateLessFunction): StateLessComponentClass {
-        return class extends Component {
-            [stateLessToken] = true;
-            render() {
-                return fn(this.props);
-            }
-        };
-    }
+    // static genarateFn(fn: stateLessFunction): StateLessComponentClass {
+    //     return class extends Component {
+    //         [stateLessToken] = true;
+    //         render() {
+    //             return fn(this.props);
+    //         }
+    //     };
+    // }
 }
 
 export default Component;

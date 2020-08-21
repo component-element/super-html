@@ -1,12 +1,29 @@
+import { Injectable, Injector, ReflectiveInjector } from 'injection-js';
 import { html, TemplateResult } from '../../../../lit-html/src/lit-html';
 import ChildInstanceManager from './childInstanceManager';
 import { ComponentTemplateToken, SimpleTemplateToken, SimpleTemplateTag, ComponentTemplateTag, TemplateTag } from '../templateTag/index';
 import { RenderComponent } from '../component';
 import { CONNECT_TYPE, DISCONNECT_TYPE } from './processorLifeCircle';
+import { ProcessProps } from '../decorators/Input';
 export const instanceTemplateResultMap = new WeakMap();
 
+@Injectable()
 export class ProcessorTemplateTagToTemplateResult {
     instanceConnectAndDisConnectTask = [];
+    constructor(public rootInjector: Injector, public processProps: ProcessProps) {}
+    processorLifeCircle() {
+        this.instanceConnectAndDisConnectTask.map(({ instance, type }) => {
+            if (type === CONNECT_TYPE) {
+                instance.connectedCallback();
+                return;
+            }
+            if (type === DISCONNECT_TYPE) {
+                instance.disconnectedCallback();
+                return;
+            }
+        });
+        this.instanceConnectAndDisConnectTask.length = 0;
+    }
     initParentChildren(parentComponent: any) {
         return ChildInstanceManager.create(parentComponent);
     }
@@ -66,11 +83,12 @@ export class ProcessorTemplateTagToTemplateResult {
                     instance = childComponentInfo.instance;
                     // update child props
                     instance.propsChangedCallback(props);
-                    childComponentInfo.instance.props = props;
+                    this.processProps.updateProps(instance, props, component);
                     const clearChildren = childrenInstanceManager.clearMiddleNotUseChildInstance(childComponentInfo.i);
                     this.clearInstance(clearChildren);
                 } else {
-                    instance = new component(props);
+                    instance = this.processProps.createClass(component);
+                    this.processProps.updateProps(instance, props, component);
                     this.addNewInstance(childrenInstanceManager, instance);
                 }
 

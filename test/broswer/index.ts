@@ -1,4 +1,4 @@
-import { render, html } from '../../src/core/index';
+import { render, boostrap, html } from '../../src/core/index';
 
 import Simple from './simple/index';
 import Props from './props/index';
@@ -16,12 +16,37 @@ import lifeCircle from './lifeCircle';
 const root = document.getElementById('root');
 const app = document.getElementById('app');
 
-const tag = html`
-    ${Simple.for()} ${timer.for()} ${updateChildProps.for()} ${Props.for({ message: 'props 传递成功' })} ${update.for()} ${ext.for()}
-    ${parentchild.for()} ${highLevel.for({ mes: 'highLevel' })} ${differentTag.for()} ${timeoutUpdate.for()} ${input.for()}
-    ${lifeCircle.for()}
-`;
+class Service {
+    method() {
+        return 'this is a service';
+    }
+}
 
-render(tag, root);
+class App {
+    static get __proto__module() {
+        return {
+            providers: [
+                {
+                    provide: HTMLElement,
+                    useValue: root
+                },
+                {
+                    provide: 'service',
+                    useClass: Service
+                }
+            ]
+        };
+    }
+    render() {
+        return html`
+            ${Simple.for()} ${timer.for()} ${updateChildProps.for()} ${Props.for({ message: 'props 传递成功' })} ${update.for()}
+            ${ext.for()} ${parentchild.for()} ${highLevel.for({ mes: 'highLevel' })} ${differentTag.for()} ${timeoutUpdate.for()}
+            ${input.for()} ${lifeCircle.for()}
+        `;
+        // return html`
+        //     ${Simple.for({})} ${timer.for()}
+        // `;
+    }
+}
 
-// render(tag, app);
+boostrap(App);
